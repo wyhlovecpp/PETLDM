@@ -16,7 +16,10 @@ def get_paths_from_images(path):
     assert os.path.isdir(path), '{:s} is not a valid directory'.format(path)
     images = []
     for dirpath, _, fnames in os.walk(path):
+        if 'desktop.ini' in fnames:
+            fnames.remove('desktop.ini')
         fnames.sort(key=lambda x: int(x.split('_')[0] + x.split('_')[-2]))
+
         for fname in fnames:
             if fname.endswith('.mat'):
                 img_path = os.path.join(dirpath, fname)

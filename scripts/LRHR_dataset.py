@@ -143,64 +143,30 @@ class LRHRDataset(Dataset):
         image_path = os.path.join(self.path[index])
         image_path = '_'.join(image_path.split('_')[:-1]) + '_' + str(self.len) + '.mat'
         self.len += 1
-        image_s = io.loadmat(image_path)['low_images'][0,:,:,:]
-        image_h = io.loadmat(image_path)['high_images'][0,:,:,:]
-        image_Lpsd = io.loadmat(image_path)['lpsd_images'][0,:,:,:]
-        image_Hpsd = io.loadmat(image_path)['hpsd_images'][0,:,:,:]
-        image_3d_l = io.loadmat(image_path)['3d_l_images'][0,:,:,:]
-        image_3d_h = io.loadmat(image_path)['3d_h_images'][0,:,:,:]
-        image_lsino = io.loadmat(image_path)['lsino_images'][0,:,:,:]
-        image_ssino = io.loadmat(image_path)['ssino_images'][0,:,:,:]
-        if self.need_LR:
-            image_l = io.loadmat(image_path)['low_images'][0,:,:,:]
-            img_lpet = torch.Tensor(image_l)
+        image_s = io.loadmat(image_path)['img'][:,:128,:]
+        image_h = io.loadmat(image_path)['img'][:,128:256,:]
+        print(image_path)
         img_spet = torch.Tensor(image_s)
         img_hpet = torch.Tensor(image_h)
-        img_Lpsd = torch.Tensor(image_Lpsd)
-        img_Hpsd = torch.Tensor(image_Hpsd)
-        img_3d_l = torch.Tensor(image_3d_l)
-        img_3d_h = torch.Tensor(image_3d_h)
-        img_lsino = torch.Tensor(image_lsino)
-        img_ssino = torch.Tensor(image_ssino)
-        for i in range(10):
-            negative_index = random.randint(0, self.num - 1)
-            while negative_index == int(index/128):
-                negative_index = random.randint(0, self.num - 1)
-            negative_path = os.path.join(self.path[negative_index*128])
-            s = np.random.normal(0, 2, 1)
-            j = int(s[0])
-            t = self.len+j-1
-            if t >= 0 and t <= 127:
-                negative_image_path = '_'.join(negative_path.split('_')[:-1]) + '_' + str(t) + '.mat'
-                negative_image = io.loadmat(negative_image_path)['high_images'][0,:,:,:]
-            else:
-                negative_image_path = '_'.join(negative_path.split('_')[:-1]) + '_' + str(self.len-1) + '.mat'
-                negative_image = io.loadmat(negative_image_path)['high_images'][0,:,:,:]
-            negative_image = torch.Tensor(negative_image)
-            if i == 0:
-                # negative_lpet = img_npet
-                negative_hpet = negative_image
-            else:
-                # negative_lpet = torch.cat((negative_lpet, img_npet), 1)
-                negative_hpet = torch.cat((negative_hpet, negative_image), 0)
+        if self.need_LR:
+            img_lpet = img_spet
 
         if self.need_LR:
-            return {'LR': img_lpet, 'HR': img_hpet, 'SR': img_spet,'LS': img_lsino,'HS': img_ssino,
-                    'LP': img_Lpsd, 'HP': img_Hpsd, 'L3D': img_3d_l, 'H3D': img_3d_h,'NHR': negative_hpet, 'Index': index}
+            return {'LR': img_lpet, 'HR': img_hpet, 'SR': img_spet, 'Index': index}
         else:
-            return {'HR': img_hpet, 'SR': img_spet, 'LP': img_Lpsd, 'HP': img_Hpsd,'LS': img_lsino,'HS': img_ssino,
-                    'L3D': img_3d_l, 'H3D': img_3d_h,'NHR':negative_hpet, 'Index': index}
+            return {'HR': img_hpet, 'SR': img_spet, 'Index': index}
 
 
 if __name__ == '__main__':
 
-    from data.LRHR_dataset import LRHRDataset as D
+    from LRHR_dataset import LRHRDataset as D
     dataset = D(
-        dataroot='F:\\new_code\code\pet\guide-pretrain\data\dataset',
+        dataroot='E:\code\\train_mat',
         datatype='jpg',
         split='train',
         data_len=-1,
         need_LR=False
     )
-    dataset.__getitem__(3)
+    for i in range(0, 256):
+        print(dataset[i]['Index'])
 
