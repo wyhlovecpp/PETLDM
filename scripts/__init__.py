@@ -1,8 +1,7 @@
 '''create dataset and dataloader'''
 import logging
-from re import split
 import torch.utils.data
-import os
+
 
 def create_dataloader(dataset, dataset_opt, phase):
     '''create dataloader '''
@@ -24,7 +23,7 @@ def create_dataloader(dataset, dataset_opt, phase):
 def create_dataset(dataset_opt, phase):
     '''create dataset'''
     mode = dataset_opt['mode']
-    from LRHR_dataset import LRHRDataset as D
+    from tests.models.latent_embedders.LRHR_dataset import LRHRDataset as D
     dataset = D(dataroot=dataset_opt['dataroot'],
                 datatype=dataset_opt['datatype'],
                 split=phase,

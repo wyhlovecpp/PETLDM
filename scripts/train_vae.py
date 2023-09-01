@@ -1,15 +1,11 @@
 from pathlib import Path
 from datetime import datetime
 
-import torch
 from torch.utils.data import ConcatDataset
 from pytorch_lightning.trainer import Trainer
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 
-
-from medical_diffusion.data.datamodules import SimpleDataModule
-from medical_diffusion.data.datasets import AIROGSDataset, MSIvsMSS_2_Dataset, CheXpert_2_Dataset
-from medical_diffusion.models.embedders.latent_embedders import VQVAE, VQGAN, VAE, VAEGAN
+from medical_diffusion.models.embedders.latent_embedders import VAE
 
 import torch.multiprocessing
 torch.multiprocessing.set_sharing_strategy('file_system')
@@ -20,7 +16,7 @@ if __name__ == "__main__":
     path_run_dir = Path.cwd() / 'runs' / str(current_time)
     path_run_dir.mkdir(parents=True, exist_ok=True)
     gpus = [0] if torch.cuda.is_available() else None
-    from LRHR_dataset import LRHRDataset as D
+    from tests.models.latent_embedders.LRHR_dataset import LRHRDataset as D
     dataset = D(
         dataroot='E:\code\\train_mat',
         datatype='jpg',
