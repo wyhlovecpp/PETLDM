@@ -819,7 +819,7 @@ class VAE(BasicModel):
 
     def _step(self, batch: dict, batch_idx: int, state: str, step: int, optimizer_idx:int):
         # ------------------------- Get Source/Target ---------------------------
-        x = batch['source']
+        x = torch.cat((batch['SR'],batch['HR']),dim=0)
         target = x
 
         # ------------------------- Run Model ---------------------------

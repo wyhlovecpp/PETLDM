@@ -120,7 +120,8 @@ class BasicUp(nn.Module):
     
     def forward(self, x, emb=None):
         if self.learnable_interpolation:
-            new_size = self.calc_shape(x.shape[2:]) 
+            new_size = self.calc_shape(x.shape[2:])
+
             x_res = F.interpolate(x, size=new_size, mode='nearest-exact')
             y = self.up_op(x_res)
             if hasattr(self, 'up_skip'):

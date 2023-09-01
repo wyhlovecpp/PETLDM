@@ -145,7 +145,6 @@ class LRHRDataset(Dataset):
         self.len += 1
         image_s = io.loadmat(image_path)['img'][:,:128,:]
         image_h = io.loadmat(image_path)['img'][:,128:256,:]
-        print(image_path)
         img_spet = torch.Tensor(image_s)
         img_hpet = torch.Tensor(image_h)
         if self.need_LR:
@@ -167,6 +166,6 @@ if __name__ == '__main__':
         data_len=-1,
         need_LR=False
     )
-    for i in range(0, 256):
+    for i in range(10, 128):
         print(dataset[i]['Index'])
 

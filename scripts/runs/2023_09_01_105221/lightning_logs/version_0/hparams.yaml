@@ -1,0 +1,44 @@
+act_name: !!python/tuple
+- Swish
+- {}
+deep_supervision: 1
+dropout: null
+emb_channels: 8
+embedding_loss_weight: 1.0e-06
+hid_chs:
+- 64
+- 128
+- 256
+- 512
+in_channels: 1
+kernel_sizes:
+- 3
+- 3
+- 3
+- 3
+learnable_interpolation: true
+loss: !!python/name:torch.nn.modules.loss.MSELoss ''
+loss_kwargs:
+  reduction: none
+lr_scheduler: null
+lr_scheduler_kwargs: {}
+norm_name: !!python/tuple
+- GROUP
+- affine: true
+  num_groups: 8
+optimizer: !!python/name:torch.optim.adam.Adam ''
+optimizer_kwargs:
+  lr: 0.0001
+out_channels: 1
+perceiver: !!python/name:medical_diffusion.loss.perceivers.LPIPS ''
+perceiver_kwargs: {}
+perceptual_loss_weight: 1.0
+sample_every_n_steps: 1000
+spatial_dims: 2
+strides:
+- 1
+- 2
+- 2
+- 2
+use_attention: none
+use_res_block: true

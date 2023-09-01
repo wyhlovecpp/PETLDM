@@ -20,10 +20,23 @@ if __name__ == "__main__":
     path_run_dir = Path.cwd() / 'runs' / str(current_time)
     path_run_dir.mkdir(parents=True, exist_ok=True)
     gpus = [0] if torch.cuda.is_available() else None
+    from LRHR_dataset import LRHRDataset as D
+    dataset = D(
+        dataroot='E:\code\\train_mat',
+        datatype='jpg',
+        split='train',
+        data_len=-1
+    )
+    dm =torch.utils.data.DataLoader(
+            dataset,
+            batch_size=8,
+            shuffle=True,
+            num_workers=0,
+            pin_memory=True)
     model = VAE(
-            in_channels=3,
-            out_channels=3,
-            emb_channels=8,
+            in_channels=1,
+            out_channels=1,
+            emb_channels=4,
             spatial_dims=2,
             hid_chs =    [ 64, 128, 256,  512],
             kernel_sizes=[ 3,  3,   3,    3],
@@ -75,7 +88,7 @@ if __name__ == "__main__":
     )
 
     # ---------------- Execute Training ----------------
-    trainer.fit(model, datamodule=dm)
+    trainer.fit(model, train_dataloaders=dm)
 
     # ------------- Save path to best model -------------
     model.save_best_checkpoint(trainer.logger.log_dir, checkpointing.best_model_path)

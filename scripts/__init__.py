@@ -24,7 +24,7 @@ def create_dataloader(dataset, dataset_opt, phase):
 def create_dataset(dataset_opt, phase):
     '''create dataset'''
     mode = dataset_opt['mode']
-    from data.LRHR_dataset import LRHRDataset as D
+    from LRHR_dataset import LRHRDataset as D
     dataset = D(dataroot=dataset_opt['dataroot'],
                 datatype=dataset_opt['datatype'],
                 split=phase,
